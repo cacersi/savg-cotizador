@@ -146,20 +146,6 @@ form.oninput = event => {
 };
 const LEAD_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd0wKhouob1zU1Bf2nB6v9CsDRFzf5Wy4WXVKwkVUCsugSVRg/formResponse';
 
-function phoneDigits(value) {
-  let digits = String(value || '').replace(/\D/g, '');
-  if (digits.length === 13 && digits.startsWith('521')) digits = digits.slice(3);
-  else if (digits.length === 12 && digits.startsWith('52')) digits = digits.slice(2);
-  return digits;
-}
-function checkContact() {
-  const name = el('clientName').value.trim();
-  el('clientName').setCustomValidity(name.length >= 2 ? '' : 'Escribe tu nombre.');
-  const phoneOk = phoneDigits(el('clientPhone').value).length === 10;
-  el('clientPhone').setCustomValidity(phoneOk ? '' : 'Escribe tu WhatsApp a 10 dígitos.');
-}
-el('clientName').addEventListener('input', checkContact);
-el('clientPhone').addEventListener('input', checkContact);
 function leadOrigin() {
   const parts = [];
   try {
@@ -172,14 +158,14 @@ function leadOrigin() {
   } catch { /* origin is optional */ }
   return (parts.join(' · ') || 'directo').slice(0, 300);
 }
-function sendLead(message, total) {
+function sendLead(message, total, sport) {
   const data = new URLSearchParams();
-  data.set('entry.1118098081', el('clientName').value.trim().slice(0, 80));
-  data.set('entry.1785133665', phoneDigits(el('clientPhone').value).replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3'));
+  data.set('entry.1118098081', sport);
+  data.set('entry.1785133665', el('qty').value);
   data.set('entry.1607049166', total ? String(total) : 'Por confirmar');
   data.set('entry.41458293', message);
   data.set('entry.1989271176', leadOrigin());
-  data.set('entry.2120415094', 'https://wa.me/52' + phoneDigits(el('clientPhone').value));
+  data.set('entry.2120415094', selected === 'asesor' ? 'Con asesor' : 'Modelo ' + selected);
   try {
     if (!(navigator.sendBeacon && navigator.sendBeacon(LEAD_URL, data))) {
       fetch(LEAD_URL, { method: 'POST', mode: 'no-cors', body: data, keepalive: true }).catch(() => {});
@@ -193,7 +179,6 @@ form.onsubmit = event => {
   if (!['Tenis', 'Pádel'].includes(sport)) return;
   el('needDate').min = nextDay(window.SavgQuote.today());
   updateScope();
-  checkContact();
   if (!form.reportValidity() || el('quoteFields').disabled) return;
   if (!selected) {
     el('designError').textContent = 'Elige un modelo o indica que quieres elegirlo con un asesor.';
@@ -205,7 +190,7 @@ form.onsubmit = event => {
   }).format(new Date(el('needDate').value + 'T12:00:00Z'));
   const estimate = updateEstimate();
   const message = [
-    'Hola, SAVG. Soy ' + el('clientName').value.trim() + '. Quiero cotizar playeras para un torneo de ' + sport.toLocaleLowerCase('es-MX') + '.',
+    'Hola, SAVG. Quiero cotizar playeras para un torneo de ' + sport.toLocaleLowerCase('es-MX') + '.',
     'Cantidad: ' + el('qty').value + ' playeras',
     'Fecha de recepción: ' + date,
     'Diseño: ' + (selected === 'asesor' ? 'Quiero elegirlo con un asesor.' : 'Modelo ' + selected),
@@ -223,7 +208,7 @@ form.onsubmit = event => {
       const lq = Q.totals([{ q: el('qty').valueAsNumber, fabric: el('fabric').value }], el('needDate').value);
       if (!el('pricedDetails').hidden && Number.isFinite(lq.total)) total = Math.round(lq.total);
     } catch { /* price confirmed by an advisor */ }
-    sendLead(message, total);
+    sendLead(message, total, sport);
     const lead = { content_name: 'Cotizador SAVG', content_category: sport };
     if (total) { lead.value = total; lead.currency = 'MXN'; }
     (window.savgTrack || function () {})('Lead', lead);
