@@ -1,0 +1,91 @@
+.tournament {
+  display:grid; grid-template-columns:minmax(0,.91fr) minmax(0,1.09fr); gap:clamp(24px,4vw,56px);
+  padding-block:36px 24px; align-items:stretch;
+}
+.court {
+  isolation:isolate; position:relative; overflow:hidden; min-height:530px;
+  border-radius:20px; background:radial-gradient(ellipse at 100% 80%,#215960,transparent 72%),#142f39; color:#fff;
+  display:flex; flex-direction:column;
+}
+.court-copy {position:relative; z-index:2; padding:34px 34px 0}
+.court-copy p {margin:0 0 12px; color:#d9edab; text-transform:uppercase; letter-spacing:.16em; font-weight:700; font-size:12px}
+.court h1 {font-size:clamp(42px,5.4vw,68px); letter-spacing:-.065em; line-height:.97; margin:0}
+.court-lines {position:absolute;z-index:-1;width:150%;height:64%;left:-24%;bottom:-15%;transform:rotate(-25deg) skewX(9deg);border:2px solid #8bada478;background:linear-gradient(90deg,transparent 14%,#8bada478 14%,#8bada478 14.4%,transparent 14.4% 85%,#8bada478 85%,#8bada478 85.4%,transparent 85.4%),linear-gradient(0deg,transparent 58%,#8bada478 58%,#8bada478 58.6%,transparent 58.6%)}
+.jersey {position:relative; flex:1; margin:4px 12px 20px;display:flex;align-items:center;justify-content:center}
+.jersey img {width:87%;height:294px;object-fit:contain;filter:drop-shadow(7px 15px 10px #07191e8c);transform:rotate(-6deg)}
+.jersey figcaption {position:absolute;bottom:0;left:22px;color:white;letter-spacing:.11em;text-transform:uppercase;font-size:10px;font-weight:700}
+.request {align-self:center;min-width:0}
+.request h2 {font-size:clamp(30px,3.3vw,43px);line-height:1.08;letter-spacing:-.055em;margin:0 0 10px}
+.subhead {color:#506568;font-size:15px;line-height:1.5;margin:0 0 22px;max-width:44ch}
+.request fieldset {border:0;padding:0;margin:0;min-width:0}
+.request legend,.pair label {font-size:14px;font-weight:700;padding:0;margin:0}
+.sport-options,.design-options,.pair {display:grid;gap:8px}
+.sport-options {grid-template-columns:1fr 1fr 1.24fr;margin:8px 0 20px}
+.sport-options label {position:relative;margin:0}
+.sport-options input {position:absolute;width:1px;height:1px;opacity:0}
+.sport-options span,.design-options button {display:block;cursor:pointer;border:1px solid #acbdba;background:white;color:var(--ink);border-radius:10px}
+.sport-options span {padding:10px 4px;text-align:center}
+.sport-options input:checked+span,.design-options [aria-pressed=true] {background:#e5efdb;border-color:#426341;box-shadow:inset 0 0 0 1px #426341}
+.sport-options input:focus-visible+span {outline:3px solid #af683f;outline-offset:3px}
+.scope-note {padding:16px;border-left:3px solid #a45f3c;background:#faf0e8}
+.pair,.design-options {grid-template-columns:repeat(2,minmax(0,1fr))}
+.pair {margin-bottom:18px}
+.pair input {height:50px;font-size:16px;font-weight:500}
+.design-options {margin:8px 0 16px}
+.design-options button {text-align:left;padding:12px;line-height:1.3}
+.design-options small {display:block;font-size:11px;line-height:1.5;font-weight:400;color:#4e6260;margin-top:4px}
+.wa {background:#175338;color:white;width:100%;display:flex;align-items:center;justify-content:space-between;font-size:16px;padding:16px 20px;border-radius:10px}
+.wa:hover {background:#0d432a}
+.wa span {font-size:22px;line-height:1}
+.handoff {font-size:12px;color:#506568;text-align:center;margin:9px 0 0}
+.models-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.models-grid button {background:#f2f4ee;border:1px solid var(--line);color:var(--ink);padding:10px;text-align:center}
+.models-grid button[aria-pressed=true] {border:2px solid #497057}
+.models-grid img {display:block;object-fit:contain;width:100%;height:100px;margin:0 0 5px}
+@media(max-width:740px){
+  .tournament {grid-template-columns:1fr;gap:22px;padding-top:16px}
+  .court {min-height:155px;flex-direction:row;align-items:center}
+  .court-copy {padding:18px 0 18px 20px;width:54%}
+  .court h1 {font-size:clamp(35px,7vw,48px)}
+  .court-copy p {font-size:10px;margin-bottom:8px}
+  .jersey {height:145px;align-self:center;margin:0 12px 0 0}
+  .jersey img {width:100%;height:122px}
+  .jersey figcaption {left:auto;right:2px;bottom:5px;font-size:8px}
+  .request {padding:0 2px}
+  .models-grid img {height:75px}
+}
+@media(max-width:370px){.models-grid {grid-template-columns:repeat(2,minmax(0,1fr))}.pair {gap:5px}.pair input{padding:8px}.design-options button{padding:10px 8px}}
+
+.quantity-minimum {margin:-10px 0 16px;color:#506568;font-size:12px;line-height:1.4}
+@media (max-width:370px) {
+  .tournament {gap:15px;padding-top:10px}
+  .court {min-height:110px}
+  .jersey {height:110px}
+  .jersey img {height:95px}
+  .court-copy {padding-block:10px}
+  .court h1 {font-size:31px}
+  .subhead {margin-bottom:14px}
+  .sport-options {margin-bottom:12px}
+  .design-options {margin-bottom:10px}
+}
+
+.instant-quote {border:1px solid #c8d5ca;border-radius:12px;background:#f0f4ed;padding:14px 16px;margin:2px 0 16px}
+.instant-quote h3 {margin:0 0 8px;font-size:18px;letter-spacing:-.025em}
+.instant-quote .quality-line,.estimate-total {display:flex;align-items:center;justify-content:space-between;gap:10px}
+.instant-quote .quality-line {font-size:13px;margin:0 0 10px;font-weight:500}
+.quality-line select {width:auto;min-width:106px;padding:7px 10px;margin:0}
+.estimate-line,.estimate-note {font-size:13px;margin:5px 0;color:#415b53}
+.estimate-total {border-top:1px solid #c8d5ca;padding-top:9px;margin:9px 0 2px;font-size:14px}
+.estimate-total strong {font-size:clamp(19px,3vw,24px);line-height:1.2}
+.estimate-note {font-size:12px;margin:5px 0 0}
+
+.date-notice {border-left:3px solid #b78023;background:#fff4dc;color:#61450e;padding:12px 14px;margin:0 0 16px;border-radius:4px;font-size:14px}
+.date-notice strong,.date-notice span {display:block}
+.date-notice span {margin-top:3px}
+.date-notice[data-state="rejected"] {color:#783224;border-color:#a84432;background:#fbede7}
+
+#brandNotice {max-width:470px;padding:clamp(22px,5vw,34px)}
+#brandNotice .notice-logo {display:block;object-fit:contain;margin:0 0 20px}
+#brandNotice h2 {font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.035em;margin:0 0 14px}
+#brandNotice p {color:var(--ink);line-height:1.55}
+#brandWarning {border-left:3px solid var(--rust);background:#faf2eb;padding:12px 14px;margin:16px 0 20px}
