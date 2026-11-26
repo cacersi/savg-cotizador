@@ -71,7 +71,7 @@ function updateScope() {
 function updateEstimate() {
   const qty = el('qty').valueAsNumber;
   const sport = form.elements.sport.value;
-  const eligible = !el('quoteFields').disabled && ['Tenis', 'Pádel'].includes(sport) && Number.isSafeInteger(qty) && qty >= 10;
+  const eligible = !el('quoteFields').disabled && ['Tenis', 'Pádel'].includes(sport) && Number.isSafeInteger(qty) && qty >= 100;
   el('estimate').hidden = !eligible;
   if (!eligible) return null;
 
@@ -222,7 +222,7 @@ el('closeLearn').onclick = () => el('learn').close();
 el('termsLink').onclick = () => el('condiciones').showModal();
 el('learnTerms').onclick = () => { el('learn').close(); el('condiciones').showModal(); };
 el('closeTerms').onclick = () => el('condiciones').close();
-['10–19','20–49','50–99','100–149','150–249','250–600'].forEach((range, index) => {
+[['100–149', 3], ['150–249', 4], ['250–600', 5]].forEach(([range, index]) => {
   const row = el('priceRows').insertRow();
   const header = document.createElement('th');
   header.textContent = range;

@@ -1,9 +1,9 @@
 /* Commercial rules retained from the published SAVG price list. */
 (function(root){
   const rates={Basic:[null,null,null,170,160,150],Premium:[null,null,235,190,180,170],Elite:[315,290,265,215,200,185]};
-  const minima={Basic:100,Premium:50,Elite:10};
+  const minima={Basic:100,Premium:100,Elite:100};
   const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',minimumFractionDigits:0,maximumFractionDigits:2}).format(n);
-  function unit(fabric,q){if(!Number.isInteger(q)||q<10||q>600||!rates[fabric])return null;return rates[fabric][q<20?0:q<50?1:q<100?2:q<150?3:q<250?4:5]}
+  function unit(fabric,q){if(!Number.isInteger(q)||q<100||q>600||!rates[fabric])return null;return rates[fabric][q<20?0:q<50?1:q<100?2:q<150?3:q<250?4:5]}
   function today(){const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Mexico_City',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());const get=t=>parts.find(p=>p.type===t).value;return `${get('year')}-${get('month')}-${get('day')}`}
   function timing(date,base=today()){
     const invalid={valid:false,express:false,days:0,kind:'pending',title:'Elige cuándo necesitas recibirlas',text:'La fecha y la ciudad nos ayudan a revisar producción y envío.'};
@@ -27,7 +27,7 @@
     if(!s.event)yellow.push('Falta elegir el deporte del torneo.');
     else if(!tournaments.includes(s.event))red.push('Este cotizador es exclusivo para torneos de tenis o pádel.');
     else green.push('El torneo corresponde a nuestro servicio.');
-    if(!vs.length||vs.some(v=>!Number.isInteger(v.q)||v.q<10||v.q>600))red.push('Cada variante debe llevar de 10 a 600 playeras para usar este cotizador. Ajusta las cantidades o consulta el proyecto con un asesor.');
+    if(!vs.length||vs.some(v=>!Number.isInteger(v.q)||v.q<100||v.q>600))red.push('Cada variante debe llevar de 100 a 600 playeras para usar este cotizador. Ajusta las cantidades o consulta el proyecto con un asesor.');
     else if(vs.some(v=>unit(v.fabric,v.q)===null))red.push('La calidad elegida no está disponible para la cantidad de alguna variante. Cambia la calidad o ajusta las piezas.');
     else green.push('La cantidad y la calidad elegidas son compatibles.');
     if(s.design==='custom')red.push('SAVG trabaja solo con diseños preestablecidos, adaptados con tus colores y logos. Para continuar, elige uno del catálogo.');
