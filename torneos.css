@@ -30,6 +30,7 @@
 .scope-note {padding:16px;border-left:3px solid #a45f3c;background:#faf0e8}
 .pair,.design-options {grid-template-columns:repeat(2,minmax(0,1fr))}
 .pair {margin-bottom:18px}
+.phone-pair {grid-template-columns:1fr;margin-bottom:6px}
 .pair input {height:50px;font-size:16px;font-weight:500}
 .design-options {margin:8px 0 16px}
 .design-options button {text-align:left;padding:12px;line-height:1.3}

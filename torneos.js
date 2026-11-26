@@ -151,6 +151,17 @@ function isIOS() {
 }
 const LEAD_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd0wKhouob1zU1Bf2nB6v9CsDRFzf5Wy4WXVKwkVUCsugSVRg/formResponse';
 
+function phoneDigits(value) {
+  let digits = String(value || '').replace(/\D/g, '');
+  if (digits.length === 13 && /^(521|044|045)/.test(digits)) digits = digits.slice(3);
+  else if (digits.length === 12 && digits.startsWith('52')) digits = digits.slice(2);
+  return digits;
+}
+function checkContact() {
+  const ok = phoneDigits(el('clientPhone').value).length === 10;
+  el('clientPhone').setCustomValidity(ok ? '' : 'Escribe tu WhatsApp a 10 dígitos.');
+}
+el('clientPhone').addEventListener('input', checkContact);
 function leadOrigin() {
   const parts = [];
   try {
@@ -171,6 +182,7 @@ function sendLead(message, total, sport) {
   data.set('entry.41458293', message);
   data.set('entry.1989271176', leadOrigin());
   data.set('entry.2120415094', selected === 'asesor' ? 'Con asesor' : 'Modelo ' + selected);
+  data.set('entry.1568063015', 'https://wa.me/52' + phoneDigits(el('clientPhone').value));
   try {
     if (!(navigator.sendBeacon && navigator.sendBeacon(LEAD_URL, data))) {
       fetch(LEAD_URL, { method: 'POST', mode: 'no-cors', body: data, keepalive: true }).catch(() => {});
@@ -184,6 +196,7 @@ form.onsubmit = event => {
   if (!['Tenis', 'Pádel'].includes(sport)) return;
   el('needDate').min = nextDay(window.SavgQuote.today());
   updateScope();
+  checkContact();
   if (!form.reportValidity() || el('quoteFields').disabled) return;
   if (!selected) {
     el('designError').textContent = 'Elige un modelo o indica que quieres elegirlo con un asesor.';
