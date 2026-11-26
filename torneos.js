@@ -145,6 +145,10 @@ form.oninput = event => {
   updateScope(); updateEstimate(); save();
 };
 const WHATSAPP_NUMBER = '524439889678';
+function isIOS() {
+  const ua = navigator.userAgent || '';
+  return /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
 const LEAD_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd0wKhouob1zU1Bf2nB6v9CsDRFzf5Wy4WXVKwkVUCsugSVRg/formResponse';
 
 function leadOrigin() {
@@ -198,9 +202,10 @@ form.onsubmit = event => {
     estimate || 'Precio por confirmar con asesor para este volumen.',
     Q.timing(el('needDate').value).express ? 'Plazo exprés de 5 a 9 días hábiles. Sujeto a disponibilidad.' : ''
   ].filter(Boolean).join('\n');
-  const whatsapp = new URL('https://wa.me/' + WHATSAPP_NUMBER);
-  whatsapp.searchParams.set('text', message);
-  el('waFallback').href = whatsapp.href;
+  const text = encodeURIComponent(message);
+  const webUrl = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + text;
+  const appUrl = 'whatsapp://send?phone=' + WHATSAPP_NUMBER + '&text=' + text;
+  el('waFallback').href = webUrl;
   el('waFallback').hidden = false;
   save();
   const now = Date.now();
@@ -216,7 +221,21 @@ form.onsubmit = event => {
     if (total) { lead.value = total; lead.currency = 'MXN'; }
     (window.savgTrack || function () {})('Lead', lead);
   }
-  setTimeout(() => location.assign(whatsapp.href), 300);
+  if (isIOS()) {
+    // Opening the app straight from the tap avoids the extra wa.me screen inside Instagram/Facebook.
+    let leftPage = false;
+    const markLeft = () => { if (document.visibilityState === 'hidden') leftPage = true; };
+    document.addEventListener('visibilitychange', markLeft);
+    window.addEventListener('pagehide', () => { leftPage = true; }, { once: true });
+    location.href = appUrl;
+    // Only if WhatsApp never opened: go to the wa.me page instead (never after coming back from the chat).
+    setTimeout(() => {
+      document.removeEventListener('visibilitychange', markLeft);
+      if (!leftPage && document.visibilityState === 'visible') location.assign(webUrl);
+    }, 2500);
+  } else {
+    setTimeout(() => location.assign(webUrl), 300);
+  }
 };
 
 el('home').onclick = event => { event.preventDefault(); window.scrollTo({top: 0, behavior:'smooth'}); };
