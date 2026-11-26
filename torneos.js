@@ -144,6 +144,7 @@ form.oninput = event => {
   if (event.target === el('fabric')) return;
   updateScope(); updateEstimate(); save();
 };
+const WHATSAPP_NUMBER = '524439889678';
 const LEAD_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd0wKhouob1zU1Bf2nB6v9CsDRFzf5Wy4WXVKwkVUCsugSVRg/formResponse';
 
 function leadOrigin() {
@@ -197,8 +198,10 @@ form.onsubmit = event => {
     estimate || 'Precio por confirmar con asesor para este volumen.',
     Q.timing(el('needDate').value).express ? 'Plazo exprés de 5 a 9 días hábiles. Sujeto a disponibilidad.' : ''
   ].filter(Boolean).join('\n');
-  const whatsapp = new URL('https://wa.me/524439889678');
+  const whatsapp = new URL('https://wa.me/' + WHATSAPP_NUMBER);
   whatsapp.searchParams.set('text', message);
+  el('waFallback').href = whatsapp.href;
+  el('waFallback').hidden = false;
   save();
   const now = Date.now();
   if (!(form.savgLeadAt > now - 2000)) {
